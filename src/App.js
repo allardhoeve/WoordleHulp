@@ -4,7 +4,7 @@ import {words} from "./words.js";
 
 
 function filterAlpha(event) {
-  if (/[^a-zA-Z]/.test(event.data)) {
+  if (/[^a-zA-Z]/.test(event.data) || event.data.length > 1) {
     event.preventDefault();
   }
 }
@@ -17,6 +17,7 @@ class WoordleHulp extends React.Component {
     this.onPlacedLetterChange = this.onPlacedLetterChange.bind(this);
     this.onGoodLettersChange = this.onGoodLettersChange.bind(this);
     this.onBadLettersChange = this.onBadLettersChange.bind(this);
+    this.onPlacedLetterKeyDown = this.onPlacedLetterKeyDown.bind(this);
 
     this.state = {
       bad_letters: [],
@@ -40,6 +41,37 @@ class WoordleHulp extends React.Component {
     const placed_letters = this.state.placed_letters;
     placed_letters[event.target.dataset.id] = event.target.value.toLowerCase();
     this.setState({"placed_letters": placed_letters})
+
+    if (event.target.value &&          // test if the field is filled, if not, it was cleared with back-space
+        event.target.nextSibling) {    // if filled, move to the next field
+      event.target.nextElementSibling.focus();
+    }
+  }
+
+  movePlacedLetter(element) {
+    if (element) {
+      element.focus();
+    }
+  }
+
+  handleFocus(event) {
+    event.target.select();
+  }
+
+  onPlacedLetterKeyDown(event) {
+    // test for left and right arrows
+    if (event.key === "ArrowLeft") {
+      this.movePlacedLetter(event.target.previousElementSibling);
+    }
+  
+    if (event.key === "ArrowRight") {
+      this.movePlacedLetter(event.target.nextElementSibling);
+    }
+    
+    // test for backspace in empty field (move left)
+    if (event.key === "Backspace" && !event.target.value) {
+      this.movePlacedLetter(event.target.previousElementSibling);
+    }
   }
 
   render() {
@@ -53,11 +85,11 @@ class WoordleHulp extends React.Component {
 
           <label htmlFor="letter1">Gevonden letters:</label>
           <div id="placed_letters" >
-            <input className="placed_letter" type="text" id="letter1" data-id="0" maxLength={1} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
-            <input className="placed_letter" type="text" id="letter2" data-id="1" maxLength={1} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
-            <input className="placed_letter" type="text" id="letter3" data-id="2" maxLength={1} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
-            <input className="placed_letter" type="text" id="letter4" data-id="3" maxLength={1} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
-            <input className="placed_letter" type="text" id="letter5" data-id="4" maxLength={1} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
+            <input className="placed_letter" type="text" id="letter1" data-id="0" maxLength={1} onFocus={this.handleFocus} onKeyDown={this.onPlacedLetterKeyDown} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
+            <input className="placed_letter" type="text" id="letter2" data-id="1" maxLength={1} onFocus={this.handleFocus} onKeyDown={this.onPlacedLetterKeyDown} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
+            <input className="placed_letter" type="text" id="letter3" data-id="2" maxLength={1} onFocus={this.handleFocus} onKeyDown={this.onPlacedLetterKeyDown} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
+            <input className="placed_letter" type="text" id="letter4" data-id="3" maxLength={1} onFocus={this.handleFocus} onKeyDown={this.onPlacedLetterKeyDown} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
+            <input className="placed_letter" type="text" id="letter5" data-id="4" maxLength={1} onFocus={this.handleFocus} onKeyDown={this.onPlacedLetterKeyDown} onBeforeInput={filterAlpha} onChange={this.onPlacedLetterChange}/>
           </div>
         </div>
 
@@ -107,7 +139,7 @@ class WordList extends React.Component {
 
     return (
       <div id="words">
-      De volgende woorden komen overeen met je criteria:<br/>
+      De volgende <b>{filtered_words.length}</b> woorden komen overeen met je criteria:<br/>
         <ul>
           {filtered_words}
         </ul>
