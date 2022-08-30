@@ -49,6 +49,8 @@ class WoordleHulp extends React.Component {
   }
 
   handleFocus(event) {
+    // select all text in the element when the element is selected so you can type over previous content
+    event.target.select();
   }
 
   onPlacedLetterKeyDown(event) {
