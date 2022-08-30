@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+
+
+function filterAlpha(event) {
+  console.log(event)
+  console.log(event.data)
+  if (/[^a-zA-Z]/.test(event.data)) {
+    event.preventDefault();
+  }
+}
+
+class Hints extends React.Component {
+  render() {
+    return (
+      <div id="letters">
+        <input name="goed" placeholder='Goede letters' onBeforeInput={filterAlpha}></input>
+        <input name="fout" placeholder='Foute letters' onBeforeInput={filterAlpha}></input>
+        <input name="letter1" maxLength={1} onBeforeInput={filterAlpha}/>
+        <input name="letter2" maxLength={1} onBeforeInput={filterAlpha}/>
+        <input name="letter3" maxLength={1} onBeforeInput={filterAlpha}/>
+        <input name="letter4" maxLength={1} onBeforeInput={filterAlpha}/>
+        <input name="letter5" maxLength={1} onBeforeInput={filterAlpha}/>
+      </div>
+    )
+  }
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Hints/>
     </div>
   );
 }
