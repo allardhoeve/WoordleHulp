@@ -48,29 +48,32 @@ class WoordleHulp extends React.Component {
     }
   }
 
-  movePlacedLetter(element) {
-    if (element) {
-      element.focus();
-    }
-  }
-
   handleFocus(event) {
-    event.target.select();
   }
 
   onPlacedLetterKeyDown(event) {
     // test for left and right arrows
-    if (event.key === "ArrowLeft") {
-      this.movePlacedLetter(event.target.previousElementSibling);
-    }
-  
-    if (event.key === "ArrowRight") {
-      this.movePlacedLetter(event.target.nextElementSibling);
-    }
-    
-    // test for backspace in empty field (move left)
-    if (event.key === "Backspace" && !event.target.value) {
-      this.movePlacedLetter(event.target.previousElementSibling);
+    switch(event.key) {
+      case "ArrowLeft":
+        event.target.previousElementSibling?.focus();
+        break;
+      case "ArrowRight":
+        event.target.nextElementSibling?.focus();
+        break;
+      // back-space on an empty field should go left
+      case "Backspace":
+        if (!event.target.value) {
+          event.target.previousElementSibling?.focus();
+        }
+        break;
+      // space on an empty field should go right
+      case " ":
+        if (!event.target.value) {
+          event.target.nextElementSibling?.focus();
+        }
+        break;
+      default:
+        break;
     }
   }
 
