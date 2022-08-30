@@ -79,7 +79,7 @@ class WoordleHulp extends React.Component {
       <div id="woordle_hulp">
         <div id="letters">
           <label htmlFor="good">Goede letters:</label>
-          <input name="good" className='letter_list' onBeforeInput={filterAlpha} onChange={this.onGoodLettersChange}></input>
+          <input name="good" className='letter_list' onBeforeInput={filterAlpha} onChange={this.onGoodLettersChange} autoFocus></input>
           <label htmlFor="bad">Foute letters:</label>
           <input name="bad" className='letter_list' onBeforeInput={filterAlpha} onChange={this.onBadLettersChange}></input>
 
